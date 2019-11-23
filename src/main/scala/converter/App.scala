@@ -1,22 +1,18 @@
 package converter
 
-import java.nio.file.FileSystems
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.Paths
+import java.nio.file.{FileSystems, Files, Path, Paths}
+
+import javax.imageio.ImageIO
+import org.imgscalr.Scalr
+import org.imgscalr.Scalr.{Method, Mode}
 
 import scala.collection.JavaConversions.iterableAsScalaIterable
 
-import org.imgscalr.Scalr
-import org.imgscalr.Scalr.Method
-import org.imgscalr.Scalr.Mode
-
-import javax.imageio.ImageIO
-
 object App extends App {
 
-  implicit def string2Path(pathString: String) = Paths.get(pathString)
-  implicit def path2String(path: Path) = path.toString()
+  implicit def string2Path(pathString: String): Path = Paths.get(pathString)
+
+  implicit def path2String(path: Path): String = path.toString
 
   def convertFile(filePath: Path, outPath: Path) {
     val inStream = Files.newInputStream(filePath)
@@ -31,7 +27,7 @@ object App extends App {
 
   def getRecursiveFileIterator(path: Path) = Files.newDirectoryStream(path).flatMap {
     case x if Files.isDirectory(x) => Files.newDirectoryStream(x)
-    case a @ _                     => a
+    case a@_ => a
   }
 
   val path = args(0)
@@ -43,7 +39,7 @@ object App extends App {
     .filter(matcher.matches)
     .map(old => (old, old.replace(path, targetString)))
     .foreach {
-      case (old, newPath) => {
+      case (old, newPath) =>
         Files.createDirectories(newPath.getParent)
 
         if (!Files.exists(newPath)) {
@@ -52,6 +48,5 @@ object App extends App {
         } else {
           println("Skipping already exists: " + newPath)
         }
-      }
     }
 }
