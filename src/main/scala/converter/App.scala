@@ -8,6 +8,9 @@ import org.imgscalr.Scalr.{Method, Mode}
 import scala.collection.convert.ImplicitConversions.`iterable AsScalaIterable`
 import scala.language.implicitConversions
 
+import scala.collection.parallel.CollectionConverters._
+
+
 object App extends App {
 
   implicit def string2Path(pathString: String): Path = Paths.get(pathString)
