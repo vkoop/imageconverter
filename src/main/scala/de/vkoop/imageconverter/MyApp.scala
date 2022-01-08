@@ -1,4 +1,4 @@
-package converter
+package de.vkoop.imageconverter
 
 import java.nio.file.{FileSystems, Files, Path, Paths}
 import javax.imageio.ImageIO
@@ -10,8 +10,7 @@ import scala.language.implicitConversions
 
 import scala.collection.parallel.CollectionConverters._
 
-
-object App extends App {
+object MyApp {
 
   implicit def string2Path(pathString: String): Path = Paths.get(pathString)
 
@@ -33,23 +32,31 @@ object App extends App {
     case a@_ => a
   }
 
-  val path = args(0)
-  val targetString = args(1)
-
-  val matcher = FileSystems.getDefault.getPathMatcher("glob:**/*.{jpg,JPG}")
-
-  getRecursiveFileIterator(path).par
-    .filter(matcher.matches)
-    .map(old => (old, old.replace(path, targetString)))
-    .foreach {
-      case (old, newPath) =>
-        Files.createDirectories(newPath.getParent)
-
-        if (!Files.exists(newPath)) {
-          println("Creating file: " + newPath)
-          convertFile(old, newPath)
-        } else {
-          println("Skipping already exists: " + newPath)
-        }
+  def main(args: Array[String]): Unit ={
+    if(args.length < 2){
+      System.exit(1);
     }
+
+    val path = args(0)
+    val targetString = args(1)
+
+    val matcher = FileSystems.getDefault.getPathMatcher("glob:**/*.{jpg,JPG}")
+
+    getRecursiveFileIterator(path).par
+      .filter(matcher.matches)
+      .map(old => (old, old.replace(path, targetString)))
+      .foreach {
+        case (old, newPath) =>
+          Files.createDirectories(newPath.getParent)
+
+          if (!Files.exists(newPath)) {
+            println("Creating file: " + newPath)
+            convertFile(old, newPath)
+          } else {
+            println("Skipping already exists: " + newPath)
+          }
+      }
+  }
+
+
 }
