@@ -1,12 +1,12 @@
 package converter
 
 import java.nio.file.{FileSystems, Files, Path, Paths}
-
 import javax.imageio.ImageIO
 import org.imgscalr.Scalr
 import org.imgscalr.Scalr.{Method, Mode}
 
-import scala.collection.JavaConversions.iterableAsScalaIterable
+import scala.collection.convert.ImplicitConversions.`iterable AsScalaIterable`
+import scala.language.implicitConversions
 
 object App extends App {
 
@@ -14,7 +14,7 @@ object App extends App {
 
   implicit def path2String(path: Path): String = path.toString
 
-  def convertFile(filePath: Path, outPath: Path) {
+  def convertFile(filePath: Path, outPath: Path): Unit = {
     val inStream = Files.newInputStream(filePath)
     val outStream = Files.newOutputStream(outPath)
     val img = ImageIO.read(inStream)
