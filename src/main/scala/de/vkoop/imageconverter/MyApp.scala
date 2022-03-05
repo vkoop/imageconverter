@@ -1,14 +1,13 @@
 package de.vkoop.imageconverter
 
-import java.nio.file.{FileSystems, Files, Path, Paths}
-import javax.imageio.ImageIO
 import org.imgscalr.Scalr
 import org.imgscalr.Scalr.{Method, Mode}
 
+import java.nio.file.{FileSystems, Files, Path, Paths}
+import javax.imageio.ImageIO
 import scala.collection.convert.ImplicitConversions.`iterable AsScalaIterable`
+import scala.collection.parallel.CollectionConverters.*
 import scala.language.implicitConversions
-
-import scala.collection.parallel.CollectionConverters._
 
 object MyApp {
 
